@@ -229,7 +229,8 @@ fronteira(russia, ucrania).
 %	a) vizinho(P1,P2) que sucede se os países fazem fronteira
 
 vizinho(P1,P2):-
-	fronteira(P1,P2).
+	fronteira(P1,P2);
+	fronteira(P2,P1).
 
 
 % ---------------------
