@@ -238,7 +238,7 @@ vizinho(P1,P2):-
 %	b)contSemPaises(C) que encontra os continentes sem países representados na BC
 
 contSemPaises(C):-
-	continente(c),
+	continente(C),
 		\+pais(_,C,_).
 					% o operador \+ funciona como switch
 	
@@ -265,12 +265,19 @@ verificarSeTemPaises(C, 1):-
 
 
 semVizinhos(L):-
+    pais(L,_,_),
 	\+terVizinhos(L). %não pode ter vizinhos
 	
 terVizinhos(L):-
-	pais(L,_,_),
 	fronteira(L,_); %significa ou 
 	fronteira(_,L).
+
+	% ----------- ou: ------------------------
+
+semVizinhos2(L):-
+	pais(L,_,_),
+	\+vizinho(L,_). %não pode ter vizinhos
+
 	
 	
 	% d) chegoLaFacil(P1, P2) que sucede se é possível chegar de P1 a P2, 
@@ -278,36 +285,48 @@ terVizinhos(L):-
 
 
 chegoLaFacil(P1, P2):-
-	fronteira(P1, P2);fronteira(P2, P1);
-	fronteira(P1, X), fronteira(X, P2); %verificar se existe pais intermédio
-	fronteira(P2, X), fronteira(X, P1);
+    vizinho(P1, P2);
+	vizinho(P1, X), vizinho(X, P2);
+	vizinho(P2, X), vizinho(X, P1).
 
+    % ---------------------
 
 % 4.
 
 	%a) Cálculo da potência inteira (negativa e não negativa) de um número. 
 
-potencia(N, P, R):- N>0,!,potenciaPositiva(N, P, R). % verificar se n é maior que zero
+potencia(_,0,1):-!.
 
-potencia(N, P, R):- N<0,!,potenciaNegativa(N, P, R). % verificar se n é menor que zero
- 
-
-
-potenciaPositiva(N, 1, R):-
-    R is N,!. % condicao de paragem 
-
-potenciaPositiva(N, P, R):-
+potencia(B,N,P):-
     N1 is N - 1,
-    potenciaPositiva(N, N1, R1),
-    R is N * R1.
+    potencia(B,N1,P1),
+    P is P1 * B.
 
 
+% pot(Base,Expoente,Potência)
+ pot(_,0,1). % base
+ pot(B,N,P) :- % passo
+ N>0, % condição  passo
+ M is N-1, % simplifica o problema
+ pot(B,M,R), % obtém solução da instância menor
+ P is B*R. % constrói solução final
+
+	%b) Cálculo do fatorial de um número.
+
+fatorial(0,1):-!.
+fatorial(N,F):-N1 is N-1,
+                fatorial(N1,F1),
+                F is N*F1.
+
+    %c) Calcular o somatório dos valores compreendidos entre J e K inclusive
 
 
-potenciaNegativa(N, 1, R):-
-    R is 1 / N,!. % condicao de paragem
+    somatorio(K,K,K):-!.
+    somatorio(J,K,S):- J1 is J + 1,
+                     somatorio(J1,K,S1),
+                     S is J + S1.
 
-potenciaNegativa(N, P, R):-
-    N1 is N - 1,
-    potenciaNegativa(N, N1, R1),
-    R is N / R1.
+
+    %d) Divisão inteira de dois números e respetivo resto
+
+    divisao(Dividendo,Divisor,D):- Dividendo1 is Dividendo
