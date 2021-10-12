@@ -329,4 +329,19 @@ fatorial(N,F):-N1 is N-1,
 
     %d) Divisão inteira de dois números e respetivo resto
 
-    divisao(Dividendo,Divisor,D):- Dividendo1 is Dividendo
+    divisao(Dividendo,Divisor,_):Dividendo<Divisor,!.
+
+    divisao(Dividendo,Divisor,D):-       Dividendo;Dividendo-Divisor,
+    divisao(Dividendo,Divisor,D1),
+    D is D1+1.
+
+    divisao(Dividendo,Divisor,_):Dividendo<Divisor,!.
+
+    divisao(Dividendo,Divisor,D):-       Dividendo;Dividendo-Divisor,
+                                                     divisao(Dividendo,Divisor,D1),
+                                                     D is D1+1.
+
+    resto(Dividendo,Divisor,R):- Dividendo1 is Dividendo-Divisor,
+                                               resto(Dividendo,Divisor,R).
+
+
