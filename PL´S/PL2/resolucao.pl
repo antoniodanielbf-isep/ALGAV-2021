@@ -52,39 +52,15 @@ menorFrenteLista([],[]):-!.
 menorFrenteLista(L,[M,L1]):- menor(L,M),
                         apaga1(M,L,L1).
 
+% Exercício 1 - h) Eliminar a 1ª ocorrência de um elemento numa lista
+
+
+concatena([],L,L).
+concatena([X|L],L1,[X])
+
 
 % Exercício 1 - h) Eliminar a 1ª ocorrência de um elemento numa lista
 
 apaga1(_,[],[]).
 apaga1(X,[X|L,L]):-!.
 apaga1(X,[Y|L],[Y|L1]):-apaga1(X,L,L1).
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
