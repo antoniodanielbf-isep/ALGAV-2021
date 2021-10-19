@@ -52,15 +52,46 @@ menorFrenteLista([],[]):-!.
 menorFrenteLista(L,[M,L1]):- menor(L,M),
                         apaga1(M,L,L1).
 
-% Exercício 1 - h) Eliminar a 1ª ocorrência de um elemento numa lista
+% Exercício 1 - g) Linearizar uma lista, ou seja, numa lista cujos elementos podem ser
+%   atómicos ou outras listas devolver a lista com todos os átomos da lista
+%   original. Por exemplo:
+%   ?- flatten([[a,b,c],[d,[e,f],g],h],L).
+%   L = [a,b,c,d,e,f,g,h]
+% percorrer a lista e ir retirando até ela ficar vazia e em cada elemento ter
+%
 
+
+
+
+% Exercício 1 - h) Eliminar a 1ª ocorrência de um elemento numa lista
 
 concatena([],L,L).
 concatena([X|L],L1,[X])
-
 
 % Exercício 1 - h) Eliminar a 1ª ocorrência de um elemento numa lista
 
 apaga1(_,[],[]).
 apaga1(X,[X|L,L]):-!.
 apaga1(X,[Y|L],[Y|L1]):-apaga1(X,L,L1).
+
+% Exercício 1 - i) Eliminar todas as ocorrências de um elemento numa lista
+% percorrer a lista retirando elemento a elemento até q ela fique vazia
+
+% Exercício 1 - j) Substituir todas as ocorrências de um dado elemento numa lista por um outro elemento
+% percorrer a lista trocando elemento a elemento até q ela fique vazia
+
+% Exercício 1 - k) Inserir um elemento numa dada posição numa lista
+% percorrer a lista e cada vez q percorre incrementa uma variavel q quando tome o valor da posição
+% leva a q se faça o append do elemento na lista
+
+% Exercício 1 - l) Inverter uma lista
+% revert das tps
+
+% Exercício 1 - m) União de dois conjuntos representados por listas (os conjuntos não
+% admitem elementos repetidos) união das tps
+
+% Exercício 1 - n) Intersecção de dois conjuntos representados por listas
+% interseção das tps
+
+% Exercício 1 - o) Diferença entre dois conjuntos representados por listas, ou seja, gera um
+% conjunto com os elementos que pertencem a um dos dois conjuntos, mas não a ambos
