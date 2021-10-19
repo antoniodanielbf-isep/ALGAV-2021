@@ -1,7 +1,7 @@
-% Ficha n. 1 ALGAV
+% Ficha n�1 ALGAV
 
 
-% Questao 1
+% Quest�o 1
 
 continente(africa).
 continente(america).
@@ -225,123 +225,59 @@ fronteira(romenia, ucrania).
 
 fronteira(russia, ucrania).
 
-%3.
-%	a) vizinho(P1,P2) que sucede se os países fazem fronteira
+% Quest�o 2
+% ?- fronteira(franca,espanha);fronteira(espanha,franca).
+% true.
 
-vizinho(P1,P2):-
-	fronteira(P1,P2);
-	fronteira(P2,P1).
-
-
-% ---------------------
-
-%	b)contSemPaises(C) que encontra os continentes sem países representados na BC
-
-contSemPaises(C):-
-	continente(C),
-		\+pais(_,C,_).
-					% o operador \+ funciona como switch
-	
-	% ----------- ou: ------------------------
-	
-continentesSemPaises(C):-
-    continente(C),
-    verificarSeTemPaises(C, R),
-    !,
-    R=0.
-
-verificarSeTemPaises(C, 1):-
-    pais(_,C,_).
-    verificarSeTemPaises(_,0).
-
-% R é uma flag
-% ! interrompe a iteração se já foi verificado que é verdade
-% _ significa que o argumento não é relevante
+% ?- pais(mexico,_,P).
+% P = 129.2.
 
 
+% Quest�o 3a
+
+vizinho(P1,P2):- fronteira(P1,P2);fronteira(P2,P1).
 
 
-	% c) semVizinhos(L) que encontra os países sem fronteiras definidas na BC
+% Quest�o 3b
+
+contSemPaises(C):- continente(C), \+pais(_, C, _).
 
 
-semVizinhos(L):-
-    pais(L,_,_),
-	\+terVizinhos(L). %não pode ter vizinhos
-	
-terVizinhos(L):-
-	fronteira(L,_); %significa ou 
-	fronteira(_,L).
+% Quest�o 3c
 
-	% ----------- ou: ------------------------
+semVizinhos(L):-pais(L,_,_), \+vizinho(L,_).
 
-semVizinhos2(L):-
-	pais(L,_,_),
-	\+vizinho(L,_). %não pode ter vizinhos
+% Quest�o 3d
 
-	
-	
-	% d) chegoLaFacil(P1, P2) que sucede se é possível chegar de P1 a P2, 
-	%diretamente ou atravessando unicamente um outro país. 
+chegoLaFacil(P1,P2):-vizinho(P1,P2).
+chegoLaFacil(P1,P2):-vizinho(P1,Pi),vizinho(Pi,P2), P2\==P1.
 
 
-chegoLaFacil(P1, P2):-
-    vizinho(P1, P2);
-	vizinho(P1, X), vizinho(X, P2);
-	vizinho(P2, X), vizinho(X, P1).
-
-    % ---------------------
-
-% 4.
-
-	%a) Cálculo da potência inteira (negativa e não negativa) de um número. 
+% Quest�o 4a
 
 potencia(_,0,1):-!.
-
-potencia(B,N,P):-
-    N1 is N - 1,
-    potencia(B,N1,P1),
-    P is P1 * B.
+potencia(B,N,P):- N<0,!,N1 is N+1,potencia(B,N1,P1),P is P1/B.
+potencia(B,N,P):-N1 is N-1,potencia(B,N1,P1), P is P1*B.
 
 
-% pot(Base,Expoente,Potência)
- pot(_,0,1). % base
- pot(B,N,P) :- % passo
- N>0, % condição  passo
- M is N-1, % simplifica o problema
- pot(B,M,R), % obtém solução da instância menor
- P is B*R. % constrói solução final
-
-	%b) Cálculo do fatorial de um número.
+% Quest�o 4b
 
 fatorial(0,1):-!.
-fatorial(N,F):-N1 is N-1,
-                fatorial(N1,F1),
-                F is N*F1.
+fatorial(N,F):-N1 is N-1, fatorial(N1,F1), F is N*F1.
 
-    %c) Calcular o somatório dos valores compreendidos entre J e K inclusive
+% Quest�o 4c
+
+somatorio(K,K,K):-!.
+somatorio(J,K,S):-J1 is J+1, somatorio(J1,K,S1), S is S1+J.
+
+% Quest�o 4d
+
+divisao(Dividendo,Divisor,0):-Dividendo<Divisor,!.
+divisao(Dividendo,Divisor,D):-Dividendo1 is Dividendo-Divisor,divisao(Dividendo1,Divisor,D1),D is D1+1.
+
+resto(Dividendo,Divisor,Dividendo):-Dividendo<Divisor,!.
+resto(Dividendo,Divisor,R):-Dividendo1 is Dividendo-Divisor,resto(Dividendo1,Divisor,R).
 
 
-    somatorio(K,K,K):-!.
-    somatorio(J,K,S):- J1 is J + 1,
-                     somatorio(J1,K,S1),
-                     S is J + S1.
-
-
-    %d) Divisão inteira de dois números e respetivo resto
-
-    divisao(Dividendo,Divisor,_):Dividendo<Divisor,!.
-
-    divisao(Dividendo,Divisor,D):-       Dividendo;Dividendo-Divisor,
-    divisao(Dividendo,Divisor,D1),
-    D is D1+1.
-
-    divisao(Dividendo,Divisor,_):Dividendo<Divisor,!.
-
-    divisao(Dividendo,Divisor,D):-       Dividendo;Dividendo-Divisor,
-                                                     divisao(Dividendo,Divisor,D1),
-                                                     D is D1+1.
-
-    resto(Dividendo,Divisor,R):- Dividendo1 is Dividendo-Divisor,
-                                               resto(Dividendo,Divisor,R).
 
 
