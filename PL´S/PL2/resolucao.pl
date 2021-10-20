@@ -77,8 +77,19 @@ apaga1(X,[Y|L],[Y|L1]):-apaga1(X,L,L1).
 % Exercício 1 - i) Eliminar todas as ocorrências de um elemento numa lista
 % percorrer a lista retirando elemento a elemento até q ela fique vazia
 
+apagarlista(_,[],[]).
+apagarlista(X,[X|T],T).
+apagarlista(X,[Y|T1],[Y|T2]):-
+    apagarlista(X,T1,T2).
+
 % Exercício 1 - j) Substituir todas as ocorrências de um dado elemento numa lista por um outro elemento
 % percorrer a lista trocando elemento a elemento até q ela fique vazia
+
+trocarelementodelista(_,[],[]).
+trocarelementodelista(X,[X|T],T).
+trocarelementodelista(X,[X|T1],[X|T2]):-
+    trocarelementodelista(X,T1,T2).
+
 
 % Exercício 1 - k) Inserir um elemento numa dada posição numa lista
 % percorrer a lista e cada vez q percorre incrementa uma variavel q quando tome o valor da posição
@@ -87,11 +98,35 @@ apaga1(X,[Y|L],[Y|L1]):-apaga1(X,L,L1).
 % Exercício 1 - l) Inverter uma lista
 % revert das tps
 
+reverse(L1,L2):-
+    reverse(L1,[],L2).
+    reverse([],L,L).
+    reverse([X|Y],A,L):-
+    reverse(Y,[X|A],L).
+
+
 % Exercício 1 - m) União de dois conjuntos representados por listas (os conjuntos não
 % admitem elementos repetidos) união das tps
+
+member(X,[X|_]).
+member(X,[_|L]):-member(X,L).
+
+union([],L,L).
+union([X|L1],L2,LU):-
+    member(X,L2),!,union(L1,L2,LU).
+union([X|L1],L2,[X|LU]):-
+        union(L1,L2,LU).
 
 % Exercício 1 - n) Intersecção de dois conjuntos representados por listas
 % interseção das tps
 
+member(X,[X|_]).
+member(X,[_|L]):-member(X,L).
+
+intersection([],_,[]).
+intersection([X|L1],L2,[X|LI]):-member(X,L2),!,intersection(L1,L2,LI).
+intersection([_,L1],L2,LI):-intersection(L1,L2,LI).
+
 % Exercício 1 - o) Diferença entre dois conjuntos representados por listas, ou seja, gera um
 % conjunto com os elementos que pertencem a um dos dois conjuntos, mas não a ambos
+
