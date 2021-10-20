@@ -60,7 +60,19 @@ menorFrenteLista(L,[M,L1]):- menor(L,M),
 % percorrer a lista e ir retirando até ela ficar vazia e em cada elemento ter
 %
 
+lista([]).
+lista(LISTA):- not var(LISTA),
+                not atomic(LISTA).
 
+achatar([],[]).
+achatar([CABECA|CAUDA],LISTAA):-
+    lista(CABECA),
+    achatar(CABECA,CABECAA),
+    achatar(CAUDA,CAUDAA),
+    concatenar(CABECAA,CAUDAA,LISTAA).
+
+achatar([CABECA|CAUDA],[CABECA|CAUDAA]):- not lista(CABECA),
+                                          achatar(CAUDA,CAUDAA).
 
 
 % Exercício 1 - h) Eliminar a 1ª ocorrência de um elemento numa lista
@@ -94,6 +106,14 @@ trocarelementodelista(X,[X|T1],[X|T2]):-
 % Exercício 1 - k) Inserir um elemento numa dada posição numa lista
 % percorrer a lista e cada vez q percorre incrementa uma variavel q quando tome o valor da posição
 % leva a q se faça o append do elemento na lista
+
+retirarelemento(_,[],[]).
+retirarelemento(X,[X|L,L]):-!.
+retirarelemento(X,[Y|L],[Y|L1]):-retirarelemento(X,L,L1).
+
+inserir(ELEMENTO,LISTA,LISTA1):-
+        retirarelemento(ELEMENTO,LISTA1,LISTA).
+
 
 % Exercício 1 - l) Inverter uma lista
 % revert das tps
@@ -130,3 +150,10 @@ intersection([_,L1],L2,LI):-intersection(L1,L2,LI).
 % Exercício 1 - o) Diferença entre dois conjuntos representados por listas, ou seja, gera um
 % conjunto com os elementos que pertencem a um dos dois conjuntos, mas não a ambos
 
+member(X,[X|_]).
+member(X,[_|L]):-member(X,L).
+
+diferencaconjuntos(C1,C2,CONJUNTODIFERENCA):-
+    findall(ELEMENTOA,member(ELEMENTO,C1),not member(ELEMENTO,C2)),CONJUNTODIFERENCA1),
+    findall(ELEMENTOB,member(ELEMENTO,C2),not member(ELEMENTO,C1)),CONJUNTODIFERENCA2)),
+    union(CONJUNTODIFERENCA1,CONJUNTODIFERENCA2,CONJUNTODIFERENCA).
