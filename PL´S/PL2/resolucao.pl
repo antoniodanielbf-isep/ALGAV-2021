@@ -61,8 +61,8 @@ menorFrenteLista(L,[M,L1]):- menor(L,M),
 %
 
 lista([]).
-lista(LISTA):- not var(LISTA),
-                not atomic(LISTA).
+lista(LISTA):-(\+ var(LISTA)),
+              (\+ atomic(LISTA)).
 
 achatar([],[]).
 achatar([CABECA|CAUDA],LISTAA):-
@@ -71,19 +71,19 @@ achatar([CABECA|CAUDA],LISTAA):-
     achatar(CAUDA,CAUDAA),
     concatenar(CABECAA,CAUDAA,LISTAA).
 
-achatar([CABECA|CAUDA],[CABECA|CAUDAA]):- not lista(CABECA),
+achatar([CABECA|CAUDA],[CABECA|CAUDAA]):- \+ lista(CABECA),
                                           achatar(CAUDA,CAUDAA).
 
 
 % Exercício 1 - h) Eliminar a 1ª ocorrência de um elemento numa lista
 
 concatena([],L,L).
-concatena([X|L],L1,[X])
+concatena([A|B],C,[A|D]):-concatena(B,C,D).
 
 % Exercício 1 - h) Eliminar a 1ª ocorrência de um elemento numa lista
 
 apaga1(_,[],[]).
-apaga1(X,[X|L,L]):-!.
+apaga1(X,[X|L],L):-!.
 apaga1(X,[Y|L],[Y|L1]):-apaga1(X,L,L1).
 
 % Exercício 1 - i) Eliminar todas as ocorrências de um elemento numa lista
@@ -108,7 +108,7 @@ trocarelementodelista(X,[X|T1],[X|T2]):-
 % leva a q se faça o append do elemento na lista
 
 retirarelemento(_,[],[]).
-retirarelemento(X,[X|L,L]):-!.
+retirarelemento(X,[X|L],L):-!.
 retirarelemento(X,[Y|L],[Y|L1]):-retirarelemento(X,L,L1).
 
 inserir(ELEMENTO,LISTA,LISTA1):-
@@ -118,30 +118,23 @@ inserir(ELEMENTO,LISTA,LISTA1):-
 % Exercício 1 - l) Inverter uma lista
 % revert das tps
 
-reverse(L1,L2):-
-    reverse(L1,[],L2).
-    reverse([],L,L).
-    reverse([X|Y],A,L):-
-    reverse(Y,[X|A],L).
+inverte(L1,L2):-inverte1(L1,[],L2).
+
+inverte1([],L,L).
+inverte1([X|Y],A,L):-write('Lista [X|A] = '),write([X|A]),nl,inverte1(Y,[X|A],L).
 
 
 % Exercício 1 - m) União de dois conjuntos representados por listas (os conjuntos não
 % admitem elementos repetidos) união das tps
 
-member(X,[X|_]).
-member(X,[_|L]):-member(X,L).
-
-union([],L,L).
-union([X|L1],L2,LU):-
-    member(X,L2),!,union(L1,L2,LU).
-union([X|L1],L2,[X|LU]):-
-        union(L1,L2,LU).
+uniao([],L,L).
+uniao([X|L1],L2,LU):-
+    member(X,L2),!,uniao(L1,L2,LU).
+uniao([X|L1],L2,[X|LU]):-
+        uniao(L1,L2,LU).
 
 % Exercício 1 - n) Intersecção de dois conjuntos representados por listas
 % interseção das tps
-
-member(X,[X|_]).
-member(X,[_|L]):-member(X,L).
 
 intersection([],_,[]).
 intersection([X|L1],L2,[X|LI]):-member(X,L2),!,intersection(L1,L2,LI).
@@ -150,10 +143,7 @@ intersection([_,L1],L2,LI):-intersection(L1,L2,LI).
 % Exercício 1 - o) Diferença entre dois conjuntos representados por listas, ou seja, gera um
 % conjunto com os elementos que pertencem a um dos dois conjuntos, mas não a ambos
 
-member(X,[X|_]).
-member(X,[_|L]):-member(X,L).
-
 diferencaconjuntos(C1,C2,CONJUNTODIFERENCA):-
-    findall(ELEMENTOA,member(ELEMENTO,C1),not member(ELEMENTO,C2)),CONJUNTODIFERENCA1),
-    findall(ELEMENTOB,member(ELEMENTO,C2),not member(ELEMENTO,C1)),CONJUNTODIFERENCA2)),
-    union(CONJUNTODIFERENCA1,CONJUNTODIFERENCA2,CONJUNTODIFERENCA).
+    findall(ELEMENTOA,(member(ELEMENTOA,C1),\+ member(ELEMENTOA,C2)),CONJUNTODIFERENCA1),
+    findall(ELEMENTOB,(member(ELEMENTOB,C2),\+ member(ELEMENTOB,C1)),CONJUNTODIFERENCA2),
+    uniao(CONJUNTODIFERENCA1,CONJUNTODIFERENCA2,CONJUNTODIFERENCA).
