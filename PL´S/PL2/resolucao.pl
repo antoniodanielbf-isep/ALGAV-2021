@@ -75,6 +75,13 @@ achatar([CABECA|CAUDA],[CABECA|CAUDAA]):- \+ lista(CABECA),
                                           achatar(CAUDA,CAUDAA).
 
 
+flatten([],[]).
+flatten([[H|T]|L],LF):-!,
+    append([H|T],L,L1),
+    flatten(L1,LF).
+flatten([X|L],[X|LF]):-flatten(L,LF).
+
+
 % Exercício 1 - h) Eliminar a 1ª ocorrência de um elemento numa lista
 
 concatena([],L,L).
@@ -97,11 +104,9 @@ apagarlista(X,[Y|T1],[Y|T2]):-
 % Exercício 1 - j) Substituir todas as ocorrências de um dado elemento numa lista por um outro elemento
 % percorrer a lista trocando elemento a elemento até q ela fique vazia
 
-trocarelementodelista(_,[],[]).
-trocarelementodelista(X,[X|T],T).
-trocarelementodelista(X,[X|T1],[X|T2]):-
-    trocarelementodelista(X,T1,T2).
-
+trocarelementodelista(_,_,[],[]).
+trocarelementodelista(X,Y,[X|L],[Y|L1]):-!,trocarelementodelista(X,Y,L,L1).
+trocarelementodelista(X,Y,[Z|L],[Z|L1]):-trocarelementodelista(X,Y,L,L1).
 
 % Exercício 1 - k) Inserir um elemento numa dada posição numa lista
 % percorrer a lista e cada vez q percorre incrementa uma variavel q quando tome o valor da posição
@@ -113,6 +118,10 @@ retirarelemento(X,[Y|L],[Y|L1]):-retirarelemento(X,L,L1).
 
 inserir(ELEMENTO,LISTA,LISTA1):-
         retirarelemento(ELEMENTO,LISTA1,LISTA).
+
+%ou
+insere(X,1,L,[X|L]):-!.
+insere(X,N,[Y|L],[Y|L1]):- N1 is N-1, insere(X,N1,L,L1).
 
 
 % Exercício 1 - l) Inverter uma lista
@@ -147,3 +156,12 @@ diferencaconjuntos(C1,C2,CONJUNTODIFERENCA):-
     findall(ELEMENTOA,(member(ELEMENTOA,C1),\+ member(ELEMENTOA,C2)),CONJUNTODIFERENCA1),
     findall(ELEMENTOB,(member(ELEMENTOB,C2),\+ member(ELEMENTOB,C1)),CONJUNTODIFERENCA2),
     uniao(CONJUNTODIFERENCA1,CONJUNTODIFERENCA2,CONJUNTODIFERENCA).
+
+%ou
+
+diferenca(L1,L2,LD):-diferenca1(L1,L2,LD12),diferenca1(L2,L1,LD21),append(LD12,LD21,LD).
+diferenca1([],_,[]).
+diferenca1([X|L1],L2,LD):-member(X,L2),
+        !,
+        diferenca1(L1,L2,LD).
+diferenca1([X|L1],L2,[X|LD]):-diferenca1(L1,L2,LD).
