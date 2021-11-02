@@ -39,10 +39,12 @@ liga(l,p).
 % Caminho = [a, b, e, j]
 
 dfs(Orig,Dest,Cam):-dfs2(Orig,Dest,[Orig],Cam).
-dfs2(Dest,Dest,LA,Cam):-reverse(LA,Cam).
+dfs2(Dest,Dest,LA,Cam):-!,reverse(LA,Cam). % o not serve para que no backtracking ele pare o algoritmo, devolvendo apenas o primeiro resultado
 dfs2(Atual,Dest,LA,Cam):-liga(Atual,X),
                             \+ member(X,LA),
                             dfs2(X,Dest,[X|LA],Cam).
+
+
 
 
 % c) Coloque os factos “liga(a,c).” e “liga(c,g)” como os primeiros da Base de
@@ -71,7 +73,26 @@ dfs2(Atual,Dest,LA,Cam):-liga(Atual,X),
 
 
 % f) Altere o Primeiro em Profundidade para considerar níveis de corte.
+% 1f - com niveis de corte
+
+dfscl(Orig,Dest,Cam,N):-dfscl2(Orig,Dest,[Orig],Cam,N).
+dfscl2(Dest,Dest,LA,Cam,_):-!,reverse(LA,Cam). % o not serve para que no backtracking ele pare o algoritmo, devolvendo apenas o primeiro resultado
+dfscl2(Atual,Dest,LA,Cam,N):- N > 0,
+                            liga(Atual,X),
+                            \+ member(X,LA),N1 is N - 1,
+                            dfscl2(X,Dest,[X|LA],Cam,N1).
 
 
 % g) Implemente o método Primeiro em Largura.
+% 1g primeiro em largura : teórica
+
+%A visita em largura começa por um vértice inicial qualquer, e depois vai então visitar os seus adjacentes, e depois
+%Distingue entre os visitados e não visitados e continua a visitar todos os vértices até que se tenha percorrido tudo.
+
+bfs(Orig,Dest,Cam):-bfs2(Orig,Dest,[[Orig]],Cam).
+bfs2(Dest,[[Dest|T]|_],Cam):-!,reverse([Dest|T],Cam).
+bfs2(Dest,[LA|Outros],Cam):-LA = [Act|_],findall([X|LA]),
+        (Dest\== Act, liga(Act,X), \+member(X,LA),Novos),       % \+member(X,LA) evita caminhos cíclicos
+        append(Outros,Novos,Todos),
+        bfs2(Dest,Cam,Todos).
 
